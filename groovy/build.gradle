@@ -13,9 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-apply plugin: 'application'
+plugins {
+    id 'application'
+    id 'maven-publish'
+}
 
-mainClassName = 'com.twosigma.beakerx.groovy.kernel.Groovy'
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+application {
+    mainClass.set('com.twosigma.beakerx.groovy.kernel.Groovy')
+}
 
 ext {
     antlr4Version = "4.5"
@@ -27,15 +35,27 @@ configurations {
 }
 
 dependencies {
-    compile group: "com.twosigma", name: "beakerx-kernel-base", version: "$beakerxVersion"
-    compile group: "org.codehaus.groovy", name: "groovy-all", version: "3.0.3"
-    compile group: 'org.antlr', name: 'antlr4-runtime', version: "$antlr4Version"
+    implementation "com.twosigma:beakerx-kernel-base:${beakerxVersion}"
+    implementation "com.twosigma:beakerx-kernel-base-api:${beakerxVersion}"
+    implementation 'org.apache.groovy:groovy-all:4.0.21'
 
-    antlr group: 'org.antlr', name: 'antlr4', version: "$antlr4Version"
+    implementation "org.antlr:antlr4-runtime:${antlr4Version}"
 
-    runtimetools group: "com.twosigma", name: "beakerx-runtimetools", version: "$beakerxVersion"
+    // these should be transitive from beakerx-kernel-base-api?
+    implementation 'org.apache.commons:commons-lang3:3.6'
+    implementation group:'org.slf4j', name: 'slf4j-log4j12', version: '2.0.13'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    implementation 'io.javalin:javalin:4.4.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    //
 
-    testCompile group: "com.twosigma", name: "beakerx-kernel-base-test", version: "$beakerxVersion"
+    antlr "org.antlr:antlr4:${antlr4Version}"
+
+    runtimetools "com.twosigma:beakerx-runtimetools:${beakerxVersion}"
+
+    testImplementation "com.twosigma:beakerx-kernel-base-test:${beakerxVersion}"
 }
 
 task antlr4_groovy_lexer(type: JavaExec) {
@@ -44,23 +64,21 @@ task antlr4_groovy_lexer(type: JavaExec) {
     args = ["GroovyLexer.g4", "-o", "../java/com/twosigma/beakerx/groovy/autocomplete", "-listener", "-no-visitor", "-package", "com.twosigma.beakerx.groovy.autocomplete", "-encoding", "UTF-8"]
     classpath = configurations.antlr
 }
+
 task antlr4_groovy_parser(type: JavaExec) {
-    main = "org.antlr.v4.Tool"
-    workingDir = "src/main/antlr4/"
-    args = ["GroovyParser.g4", "-o", "../java/com/twosigma/beakerx/groovy/autocomplete", "-listener", "-no-visitor", "-package", "com.twosigma.beakerx.groovy.autocomplete", "-encoding", "UTF-8"]
+    main = 'org.antlr.v4.Tool'
+    workingDir = 'src/main/antlr4/'
+    args = ['GroovyParser.g4', '-o', '../java/com/twosigma/beakerx/groovy/autocomplete', '-listener', '-no-visitor', '-package', 'com.twosigma.beakerx.groovy.autocomplete', '-encoding', 'UTF-8']
     classpath = configurations.antlr
 }
-compileJava.dependsOn antlr4_groovy_lexer
-compileJava.dependsOn antlr4_groovy_parser
+
+install.dependsOn antlr4_groovy_lexer
+install.dependsOn antlr4_groovy_parser
 
 jar {
     manifest {
-        attributes "Main-Class": "$mainClassName"
+        attributes("Main-Class": "${application.mainClass}")
     }
-}
-
-clean.doFirst {
-    delete "${rootDir}/groovy-dist/beakerx_groovy/kernel"
 }
 
 publishing {
@@ -68,33 +86,29 @@ publishing {
         maven(MavenPublication) {
             groupId 'com.twosigma'
             artifactId 'beakerx-kernel-groovy'
-            version "$beakerxVersion"
+            version "${beakerxVersion}"
             from components.java
         }
     }
 }
 
-distZip.dependsOn installDist
+distributions {
+    main {
+        distributionBaseName = 'groovy-dist'
+        contents {
+            from jar
+            from configurations.runtimeClasspath
+            into 'lib'
 
-task copyDependencies(type: Copy) {
-    from configurations.runtime
-    from jar
-    into new File('../groovy-dist/beakerx_groovy/kernel/', 'lib')
-}
-jar.finalizedBy copyDependencies
+            from configurations.runtimetools
+            into 'ext'
+            include 'beakerx-runtimetools*.jar'
 
-task copyStaticContent(type: Copy) {
-    from '.'
-    into new File('../groovy-dist/beakerx_groovy/kernel/', '')
-    include '*.png'
-    include 'kernel.json'
+            from('.') {
+                include '*.png'
+                include 'kernel.json'
+                into '..'
+            }
+        }
+    }
 }
-jar.finalizedBy copyStaticContent
-
-task copyRuntimetools(type: Copy) {
-    from configurations.runtimetools
-    from jar
-    into new File('../groovy-dist/beakerx_groovy/kernel/', 'ext')
-    include 'beakerx-runtimetools*.jar'
-}
-jar.finalizedBy copyRuntimetools

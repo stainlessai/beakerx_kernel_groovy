@@ -13,39 +13,39 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
 wrapper {
-    gradleVersion = '6.4.1'
+    gradleVersion = '7.3.3'
 }
 
 allprojects {
-    apply plugin: 'java'
     repositories {
         mavenLocal()
         jcenter()
+        mavenCentral()
         maven { url 'https://jitpack.io' }
     }
-}
 
-subprojects {
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
-
-    ext {
-        beakerxVersion = "2.0-SNAPSHOT"
-    }
-
-    compileJava {
+    tasks.withType(JavaCompile) {
         options.compilerArgs << '-XDenableSunApiLintControl'
         options.encoding = "UTF-8"
     }
 
-    java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+    subprojects {
+        ext {
+            beakerxVersion = "2.0-SNAPSHOT"
+        }
 
-    install {
-        dependsOn 'build'
-        dependsOn 'publishToMavenLocal'
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+
+        task install {
+            dependsOn 'build'
+            dependsOn 'publishToMavenLocal'
+        }
     }
 }
