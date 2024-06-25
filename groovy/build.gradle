@@ -97,7 +97,7 @@ task copyLibs(type: Copy) {
 
     from configurations.runtimeClasspath
     from jar
-    into "${project.rootDir}/groovy-dist/lib"
+    into "${project.rootDir}/groovy-dist/beakerx_groovy/kernel/lib"
 }
 install.dependsOn copyLibs
 
@@ -106,7 +106,7 @@ task copyExt(type: Copy) {
 
     from configurations.runtimetools
     include 'beakerx-runtimetools*.jar'
-    into "${project.rootDir}/groovy-dist/ext"
+    into "${project.rootDir}/groovy-dist/beakerx_groovy/kernel/ext"
 }
 install.dependsOn copyExt
 
@@ -115,6 +115,6 @@ task copyMisc(type: Copy) {
         include '*.png'
         include 'kernel.json'
     }
-    into "${project.rootDir}/groovy-dist"
+    into "${project.rootDir}/groovy-dist/beakerx_groovy/kernel"
 }
 install.dependsOn copyMisc
