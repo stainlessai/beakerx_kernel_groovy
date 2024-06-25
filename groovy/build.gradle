@@ -34,7 +34,16 @@ configurations {
     antlr
 }
 
+configurations.all {
+    exclude group: "org.codehaus.groovy", module: "groovy-datetime"
+}
+
 dependencies {
+    implementation('org.apache.groovy:groovy-datetime') {
+        version {
+            strictly '4.0.21'
+        }
+    }
     implementation "com.twosigma:beakerx-kernel-base:${beakerxVersion}"
     implementation "com.twosigma:beakerx-kernel-base-api:${beakerxVersion}"
     implementation 'org.apache.groovy:groovy-all:4.0.21'
