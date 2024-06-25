@@ -92,23 +92,29 @@ publishing {
     }
 }
 
-distributions {
-    main {
-        distributionBaseName = 'groovy-dist'
-        contents {
-            from jar
-            from configurations.runtimeClasspath
-            into 'lib'
+task copyLibs(type: Copy) {
+    dependsOn 'jar'
 
-            from configurations.runtimetools
-            into 'ext'
-            include 'beakerx-runtimetools*.jar'
-
-            from('.') {
-                include '*.png'
-                include 'kernel.json'
-                into '..'
-            }
-        }
-    }
+    from configurations.runtimeClasspath
+    from jar
+    into "${project.rootDir}/groovy-dist/lib"
 }
+install.dependsOn copyLibs
+
+task copyExt(type: Copy) {
+    dependsOn 'jar'
+
+    from configurations.runtimetools
+    include 'beakerx-runtimetools*.jar'
+    into "${project.rootDir}/groovy-dist/ext"
+}
+install.dependsOn copyExt
+
+task copyMisc(type: Copy) {
+    from("${project.rootDir}/groovy") {
+        include '*.png'
+        include 'kernel.json'
+    }
+    into "${project.rootDir}/groovy-dist"
+}
+install.dependsOn copyMisc
