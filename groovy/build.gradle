@@ -39,11 +39,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation('org.apache.groovy:groovy-datetime') {
-        version {
-            strictly '4.0.21'
-        }
-    }
+    implementation('org.apache.groovy:groovy-datetime')
     implementation "com.twosigma:beakerx-kernel-base:${beakerxVersion}"
     implementation "com.twosigma:beakerx-kernel-base-api:${beakerxVersion}"
     implementation 'org.apache.groovy:groovy-all:4.0.21'
