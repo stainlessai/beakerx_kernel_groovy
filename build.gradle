@@ -37,7 +37,7 @@ allprojects {
 
     subprojects {
         ext {
-            beakerxVersion = "2.0-SNAPSHOT"
+            beakerxVersion = "2.1-SNAPSHOT"
         }
 
         sourceCompatibility = JavaVersion.VERSION_17
