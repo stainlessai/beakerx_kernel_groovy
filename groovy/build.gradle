@@ -47,13 +47,13 @@ dependencies {
     implementation "org.antlr:antlr4-runtime:${antlr4Version}"
 
     // these should be transitive from beakerx-kernel-base-api?
-    implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation group:'org.slf4j', name: 'slf4j-log4j12', version: '2.0.13'
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'commons-beanutils:commons-beanutils:1.9.4'
-    implementation 'io.javalin:javalin:4.4.0'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+//    implementation 'org.apache.commons:commons-lang3:3.6'
+//    implementation group:'org.slf4j', name: 'slf4j-log4j12', version: '2.0.13'
+//    implementation 'com.google.code.gson:gson:2.8.9'
+//    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+//    implementation 'io.javalin:javalin:4.4.0'
+//    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
+//    testImplementation group: 'junit', name: 'junit', version: '4.12'
     //
 
     antlr "org.antlr:antlr4:${antlr4Version}"
@@ -64,14 +64,14 @@ dependencies {
 }
 
 task antlr4_groovy_lexer(type: JavaExec) {
-    main = "org.antlr.v4.Tool"
+    mainClass = "org.antlr.v4.Tool"
     workingDir = "src/main/antlr4/"
     args = ["GroovyLexer.g4", "-o", "../java/com/twosigma/beakerx/groovy/autocomplete", "-listener", "-no-visitor", "-package", "com.twosigma.beakerx.groovy.autocomplete", "-encoding", "UTF-8"]
     classpath = configurations.antlr
 }
 
 task antlr4_groovy_parser(type: JavaExec) {
-    main = 'org.antlr.v4.Tool'
+    mainClass = 'org.antlr.v4.Tool'
     workingDir = 'src/main/antlr4/'
     args = ['GroovyParser.g4', '-o', '../java/com/twosigma/beakerx/groovy/autocomplete', '-listener', '-no-visitor', '-package', 'com.twosigma.beakerx.groovy.autocomplete', '-encoding', 'UTF-8']
     classpath = configurations.antlr
