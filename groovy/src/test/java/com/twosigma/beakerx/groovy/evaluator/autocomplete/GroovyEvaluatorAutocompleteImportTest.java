@@ -32,7 +32,11 @@ public class GroovyEvaluatorAutocompleteImportTest extends JVMEvaluatorAutocompl
 
   @AfterClass
   public static void tearDown() throws Exception {
-    groovyEvaluator.exit();
+    try {
+      groovyEvaluator.exit();
+    } catch (UnsupportedOperationException e) {
+      System.err.println("WARNING: exit() not supported anymore");
+    }
   }
 
   @Override

@@ -60,7 +60,11 @@ public class GroovyInspectTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-        groovyEvaluator.exit();
+        try {
+      groovyEvaluator.exit();
+    } catch (UnsupportedOperationException e) {
+      System.err.println("WARNING: exit() not supported anymore");
+    }
     }
 
     @Test
