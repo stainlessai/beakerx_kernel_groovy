@@ -33,18 +33,19 @@ allprojects {
         options.compilerArgs << '-XDenableSunApiLintControl'
         options.encoding = "UTF-8"
     }
+}
 
-    subprojects {
-        ext {
-            beakerxVersion = rootProject.property('beakerxVersion')
-        }
+subprojects {
+    ext {
+        beakerxVersion = rootProject.property('beakerxVersion')
+        groupId = rootProject.property('groupId')
+    }
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 
-        task install {
-            dependsOn 'build'
-            dependsOn 'publishToMavenLocal'
-        }
+    task install {
+        dependsOn 'build'
+        dependsOn 'publishToMavenLocal'
     }
 }
