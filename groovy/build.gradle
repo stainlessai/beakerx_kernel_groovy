@@ -40,8 +40,8 @@ configurations.all {
 
 dependencies {
     implementation('org.apache.groovy:groovy-datetime')
-    implementation "com.twosigma:beakerx-kernel-base:${beakerxVersion}"
-    implementation "com.twosigma:beakerx-kernel-base-api:${beakerxVersion}"
+    implementation "${groupId}:beakerx-kernel-base:${beakerxVersion}"
+    implementation "${groupId}:beakerx-kernel-base-api:${beakerxVersion}"
     implementation 'org.apache.groovy:groovy-all:4.0.21'
 
     implementation "org.antlr:antlr4-runtime:${antlr4Version}"
@@ -58,9 +58,9 @@ dependencies {
 
     antlr "org.antlr:antlr4:${antlr4Version}"
 
-    runtimetools "com.twosigma:beakerx-runtimetools:${beakerxVersion}"
+    runtimetools "${groupId}:beakerx-runtimetools:${beakerxVersion}"
 
-    testImplementation "com.twosigma:beakerx-kernel-base-test:${beakerxVersion}"
+    testImplementation "${groupId}:beakerx-kernel-base-test:${beakerxVersion}"
 }
 
 task antlr4_groovy_lexer(type: JavaExec) {
@@ -89,7 +89,7 @@ jar {
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'com.twosigma'
+            groupId project.groupId
             artifactId 'beakerx-kernel-groovy'
             version "${beakerxVersion}"
             from components.java
