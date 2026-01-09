@@ -36,7 +36,7 @@ allprojects {
 
     subprojects {
         ext {
-            beakerxVersion = "2.1-SNAPSHOT"
+            beakerxVersion = rootProject.property('beakerxVersion')
         }
 
         sourceCompatibility = JavaVersion.VERSION_17
