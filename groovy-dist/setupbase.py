@@ -131,8 +131,12 @@ def run_gradle(path=kernel_path, cmd='install', skip_tests=False):
                 return '-Dskip.tests=False'
 
         def run(self):
-            run([('' if sys.platform == 'win32' else './') + 'gradlew', '--no-daemon', 'clean', cmd,
-                 self.skip_test_option(skip_tests)], cwd=path)
+            gradle_cmd = [('' if sys.platform == 'win32' else './') + 'gradlew', '--no-daemon', 'clean', cmd,
+                 self.skip_test_option(skip_tests)]
+            beakerx_version = os.environ.get('BEAKERX_VERSION')
+            if beakerx_version:
+                gradle_cmd.append('-PbeakerxVersion=' + beakerx_version)
+            run(gradle_cmd, cwd=path)
 
     return Gradle
 
