@@ -91,7 +91,7 @@ publishing {
         maven(MavenPublication) {
             groupId project.groupId
             artifactId 'beakerx-kernel-groovy'
-            version "${beakerxVersion}"
+            version project.version
             from components.java
         }
     }
