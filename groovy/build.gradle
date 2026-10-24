@@ -42,6 +42,8 @@ dependencies {
     implementation('org.apache.groovy:groovy-datetime')
     implementation "${groupId}:beakerx-kernel-base:${beakerxVersion}"
     implementation "${groupId}:beakerx-kernel-base-api:${beakerxVersion}"
+    implementation 'org.zeromq:jeromq:0.5.4'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.17.0'
     implementation 'org.apache.groovy:groovy-all:4.0.21'
 
     implementation "org.antlr:antlr4-runtime:${antlr4Version}"
@@ -95,6 +97,11 @@ publishing {
             from components.java
         }
     }
+}
+
+clean {
+    delete "${project.rootDir}/groovy-dist/beakerx_groovy/kernel/lib"
+    delete "${project.rootDir}/groovy-dist/beakerx_groovy/kernel/ext"
 }
 
 task copyLibs(type: Copy) {
