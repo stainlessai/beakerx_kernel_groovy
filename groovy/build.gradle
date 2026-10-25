@@ -44,7 +44,7 @@ dependencies {
     implementation "${groupId}:beakerx-kernel-base-api:${beakerxVersion}"
     implementation 'org.zeromq:jeromq:0.5.4'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.18.2'
-    implementation 'org.apache.groovy:groovy-all:4.0.25'
+    implementation 'org.apache.groovy:groovy-all:5.0.8'
 
     implementation "org.antlr:antlr4-runtime:${antlr4Version}"
 
