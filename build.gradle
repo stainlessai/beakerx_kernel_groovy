@@ -19,7 +19,7 @@ plugins {
 }
 
 wrapper {
-    gradleVersion = '8.1.1'
+    gradleVersion = '8.13'
 }
 
 allprojects {
@@ -30,7 +30,7 @@ allprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs << '-XDenableSunApiLintControl'
+        // -XDenableSunApiLintControl removed for Java 25 compatibility
         options.encoding = "UTF-8"
     }
 }
